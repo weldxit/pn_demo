@@ -1,358 +1,78 @@
-import React, { useState } from 'react';
-import {
-  Container,
-  Typography,
-  Button,
-  Table,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  TextField,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  IconButton,
-} from '@mui/material';
-import { Edit, Delete } from '@mui/icons-material';
+import React, { useState, useEffect } from 'react';
+import { Select, MenuItem, Paper, CircularProgress } from '@mui/material';
 
-const SalaryManagement = ({ employees }) => {
-  const [salaryStructures, setSalaryStructures] = useState([
-    { id: 1, name: 'Standard Salary', basicSalary: 50000, overtimeRate: 0.05, bonusRate: 0.1, deductionRate: 0.02 },
-    // Add more sample structures
-  ]);
+import Telecall from './telecalling';
+import Collection from './collections';
 
-  const [openAddStructureDialog, setOpenAddStructureDialog] = useState(false);
-  const [openEditStructureDialog, setOpenEditStructureDialog] = useState(false);
-  const [newStructureName, setNewStructureName] = useState('');
-  const [newStructureBasicSalary, setNewStructureBasicSalary] = useState(0);
-  const [newStructureOvertimeRate, setNewStructureOvertimeRate] = useState(0);
-  const [newStructureBonusRate, setNewStructureBonusRate] = useState(0);
-  const [newStructureDeductionRate, setNewStructureDeductionRate] = useState(0);
-  const [selectedStructureId, setSelectedStructureId] = useState(null);
-  const [selectedEmployeeForSalaryCalculation, setSelectedEmployeeForSalaryCalculation] = useState(null);
-  const [calculatedSalary, setCalculatedSalary] = useState(null);
-  // Employee Management State and Filter Options
-  const [filteredEmployees, setFilteredEmployees] = useState(employees);
-  const [filterOptions, setFilterOptions] = useState({
-    employeeName: '',
-    department: '',
-    phoneNumber: '',
-    position: '',
-    isSalaryDistributed: true,
-  });
+const TwoTabComponent = () => {
+  const [selectedTab, setSelectedTab] = useState(0);
+  const [tab1Data, setTab1Data] = useState(null);
+  const [tab2Data, setTab2Data] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const applyFilters = () => {
-    const filtered = employees.filter((employee) => {
-      const nameMatches = employee.name?.toLowerCase().includes(filterOptions.employeeName.toLowerCase());
-      const departmentMatches = employee.department?.toLowerCase().includes(filterOptions.department.toLowerCase());
-      const phoneMatches = employee.phoneNumber?.includes(filterOptions.phoneNumber);
-      const positionMatches = employee.position?.toLowerCase().includes(filterOptions.position.toLowerCase());
-      const salaryDistributedMatches = filterOptions.isSalaryDistributed
-        ? employee.salaryDistributed
-        : !employee.salaryDistributed;
-
-      return nameMatches && departmentMatches && phoneMatches && positionMatches && salaryDistributedMatches;
-    });
-
-    setFilteredEmployees(filtered);
-  };
-
-  const handleFilterChange = (field, value) => {
-    setFilterOptions((prevOptions) => ({
-      ...prevOptions,
-      [field]: value,
-    }));
-  };
-  const [selectedEmployee, setSelectedEmployee] = useState(null); // Added state for selected employee
-  const [salaryHistoryDialogOpen, setSalaryHistoryDialogOpen] = useState(false);
-  
-  const openSalaryHistoryDialog = (employee) => {
-    setSelectedEmployee(employee);
-    setSalaryHistoryDialogOpen(true);
-  };
-  
-  const closeSalaryHistoryDialog = () => {
-    setSalaryHistoryDialogOpen(false);
-    setSelectedEmployee(null);
-  };
-  const toggleSalaryDistributionFilter = () => {
-    handleFilterChange('isSalaryDistributed', !filterOptions.isSalaryDistributed);
-  };
-
-  const handleAddStructure = () => {
-    const newStructure = {
-      id: salaryStructures.length + 1,
-      name: newStructureName,
-      basicSalary: newStructureBasicSalary,
-      overtimeRate: newStructureOvertimeRate,
-      bonusRate: newStructureBonusRate,
-      deductionRate: newStructureDeductionRate,
+  useEffect(() => {
+    const fetchDataForTab1 = async () => {
+      setLoading(true);
+      // Simulate data fetching for Tab 1
+      await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate 2-second delay
+      // Example: const data = await apiCallForTab1();
+      // setTab1Data(data);
+      setLoading(false);
     };
 
-    setSalaryStructures([...salaryStructures, newStructure]);
-    setOpenAddStructureDialog(false);
-    clearNewStructureFields();
+    const fetchDataForTab2 = async () => {
+      setLoading(true);
+      // Simulate data fetching for Tab 2
+      await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate 2-second delay
+      // Example: const data = await apiCallForTab2();
+      // setTab2Data(data);
+      setLoading(false);
+    };
+
+    if (selectedTab === 0 && !tab1Data) {
+      fetchDataForTab1();
+    }
+
+    if (selectedTab === 1 && !tab2Data) {
+      fetchDataForTab2();
+    }
+  }, [selectedTab, tab1Data, tab2Data]);
+
+  const handleChange = (event) => {
+    setSelectedTab(event.target.value);
   };
 
-  const handleEditStructure = () => {
-    const updatedStructures = salaryStructures.map((structure) =>
-      structure.id === selectedStructureId
-        ? {
-            ...structure,
-            name: newStructureName,
-            basicSalary: newStructureBasicSalary,
-            overtimeRate: newStructureOvertimeRate,
-            bonusRate: newStructureBonusRate,
-            deductionRate: newStructureDeductionRate,
-          }
-        : structure
-    );
-
-    setSalaryStructures(updatedStructures);
-    setOpenEditStructureDialog(false);
-    clearNewStructureFields();
-  };
-
-  const handleEditButtonClick = (structureId) => {
-    const selectedStructure = salaryStructures.find((structure) => structure.id === structureId);
-    setSelectedStructureId(structureId);
-    setNewStructureName(selectedStructure.name);
-    setNewStructureBasicSalary(selectedStructure.basicSalary);
-    setNewStructureOvertimeRate(selectedStructure.overtimeRate);
-    setNewStructureBonusRate(selectedStructure.bonusRate);
-    setNewStructureDeductionRate(selectedStructure.deductionRate);
-    setOpenEditStructureDialog(true);
-  };
-
-  const handleDeleteStructure = (structureId) => {
-    const updatedStructures = salaryStructures.filter((structure) => structure.id !== structureId);
-    setSalaryStructures(updatedStructures);
-  };
-
-  const clearNewStructureFields = () => {
-    setNewStructureName('');
-    setNewStructureBasicSalary(0);
-    setNewStructureOvertimeRate(0);
-    setNewStructureBonusRate(0);
-    setNewStructureDeductionRate(0);
-  };
-
-  const renderEmployeeManagement = () => (
-    <div>
-      <Typography variant="h6" gutterBottom>
-        Employee Management
-      </Typography>
-      <TextField
-        label="Employee Name"
-        value={filterOptions.employeeName}
-        onChange={(e) => handleFilterChange('employeeName', e.target.value)}
-        margin="normal"
-      />
-      <TextField
-        label="Department"
-        value={filterOptions.department}
-        onChange={(e) => handleFilterChange('department', e.target.value)}
-        margin="normal"
-      />
-      <TextField
-        label="Phone Number"
-        value={filterOptions.phoneNumber}
-        onChange={(e) => handleFilterChange('phoneNumber', e.target.value)}
-        margin="normal"
-      />
-      <TextField
-        label="Position"
-        value={filterOptions.position}
-        onChange={(e) => handleFilterChange('position', e.target.value)}
-        margin="normal"
-      />
-      <Button onClick={applyFilters} variant="contained" color="primary">
-        Apply Filters
-      </Button>
-      <Button onClick={() => setFilterOptions({})} variant="outlined">
-        Clear Filters
-      </Button>
-
-      {/* Display filtered employees */}
-      <TableContainer>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>Department</TableCell>
-            <TableCell>Phone Number</TableCell>
-            <TableCell>Position</TableCell>
-            <TableCell>Salary Distributed</TableCell>
-            <TableCell>Action</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {filteredEmployees.map((employee) => (
-            <TableRow key={employee.id}>
-              <TableCell>
-                <Button onClick={() => openSalaryHistoryDialog(employee)}>{employee.name}</Button>
-              </TableCell>
-              <TableCell>{employee.department}</TableCell>
-              <TableCell>{employee.phoneNumber}</TableCell>
-              <TableCell>{employee.position}</TableCell>
-              <TableCell>{employee.salaryDistributed ? 'Yes' : 'No'}</TableCell>
-              {/* Add additional action buttons as needed */}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-    </div>
-  );
-  const renderSalaryHistoryDialog = () => (
-    <Dialog open={salaryHistoryDialogOpen} onClose={closeSalaryHistoryDialog}>
-      <DialogTitle>Salary History for {selectedEmployee ? selectedEmployee.name : ''}</DialogTitle>
-      <DialogContent>
-        {/* Display salary history here */}
-        {/* You can fetch and display the actual salary history data */}
-        {selectedEmployee && (
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Date</TableCell>
-                  <TableCell>Salary Amount</TableCell>
-                  {/* Add additional columns as needed */}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {/* Map through actual salary history data and display each entry */}
-                {/* For now, using placeholder data */}
-                <TableRow>
-                  <TableCell>2022-01-01</TableCell>
-                  <TableCell>$50,000</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>2022-02-01</TableCell>
-                  <TableCell>$55,000</TableCell>
-                </TableRow>
-                {/* Add more rows based on actual data */}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={closeSalaryHistoryDialog}>Close</Button>
-      </DialogActions>
-    </Dialog>
-  );
   return (
-    <Container>
-      <Typography variant="h5" gutterBottom>
-        Salary Management
-      </Typography>
+    <div className="flex flex-col items-center">
+      <Select
+        value={selectedTab}
+        onChange={handleChange}
+        label="Select Tab"
+        size='small'
+        className="mb-2 self-start text-black"
+      >
+        <MenuItem value={0}>BO/TC</MenuItem>
+        <MenuItem value={1}>Collections</MenuItem>
+      </Select>
 
-      {/* Salary Structures */}
-      <Typography variant="h6" gutterBottom>
-        Salary Structures
-      </Typography>
-      <Button variant="contained" onClick={() => setOpenAddStructureDialog(true)}>
-        Add New Structure
-      </Button>
-      <TableContainer>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Basic Salary</TableCell>
-              <TableCell>Overtime Rate</TableCell>
-              <TableCell>Bonus Rate</TableCell>
-              <TableCell>Deduction Rate</TableCell>
-              <TableCell>Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {salaryStructures.map((structure) => (
-              <TableRow key={structure.id}>
-                <TableCell>{structure.name}</TableCell>
-                <TableCell>{structure.basicSalary}</TableCell>
-                <TableCell>{structure.overtimeRate}</TableCell>
-                <TableCell>{structure.bonusRate}</TableCell>
-                <TableCell>{structure.deductionRate}</TableCell>
-                <TableCell>
-                  <IconButton onClick={() => handleEditButtonClick(structure.id)} color="primary">
-                    <Edit />
-                  </IconButton>
-                  <IconButton onClick={() => handleDeleteStructure(structure.id)} color="error">
-                    <Delete />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      {/* Add/Edit Structure Dialog */}
-      <Dialog open={openAddStructureDialog || openEditStructureDialog} onClose={() => setOpenAddStructureDialog(false)}>
-        <DialogTitle>{openAddStructureDialog ? 'Add New' : 'Edit'} Salary Structure</DialogTitle>
-        <DialogContent>
-          <TextField
-            label="Name"
-            value={newStructureName}
-            onChange={(e) => setNewStructureName(e.target.value)}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Basic Salary"
-            type="number"
-            value={newStructureBasicSalary}
-            onChange={(e) => setNewStructureBasicSalary(e.target.value)}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Overtime Rate"
-            type="number"
-            value={newStructureOvertimeRate}
-            onChange={(e) => setNewStructureOvertimeRate(e.target.value)}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Bonus Rate"
-            type="number"
-            value={newStructureBonusRate}
-            onChange={(e) => setNewStructureBonusRate(e.target.value)}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Deduction Rate"
-            type="number"
-            value={newStructureDeductionRate}
-            onChange={(e) => setNewStructureDeductionRate(e.target.value)}
-            fullWidth
-            margin="normal"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenAddStructureDialog(false)}>Cancel</Button>
-          <Button
-            onClick={openAddStructureDialog ? handleAddStructure : handleEditStructure}
-            variant="contained"
-            color="primary"
-          >
-            {openAddStructureDialog ? 'Add Structure' : 'Save Changes'}
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Employee Management Section */}
-      {renderEmployeeManagement()}
-      {renderSalaryHistoryDialog()}
-    </Container>
+      <Paper className="flex w-full justify-center">
+        {loading ? (
+          <div className="flex justify-center items-center h-16">
+            <CircularProgress />
+          </div>
+        ) : (
+          <div className='flex w-full'>
+            {selectedTab === 0 && (
+              <div className='w-full h-screen bg-red-400'>{tab1Data ? tab1Data : <Telecall />}</div>
+            )}
+            {selectedTab === 1 && (
+              <div className='w-full h-screen bg-red-400'>{tab2Data ? tab2Data : <Collection />}</div>
+            )}
+          </div>
+        )}
+      </Paper>
+    </div>
   );
 };
 
-export default SalaryManagement;
+export default TwoTabComponent;

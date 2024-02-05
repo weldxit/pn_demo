@@ -5,7 +5,7 @@ const Dashboard = ({ data }) => {
   const { attendance, salary, reminders } = data;
 
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={3} className='h-screen'>
       <Grid item xs={12} sm={4}>
         <Card>
           <CardContent>
