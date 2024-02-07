@@ -62,7 +62,7 @@ const ThreeDropdownComponent = ({ onTLChange, onProductChange, onExecutiveChange
   };
 
   return (
-    <div className="p-4 bg-blue-200">
+    <div className="p-4 bg-white shadow-md">
       <div className="flex items-center">
         {/* TL Dropdown */}
         <select

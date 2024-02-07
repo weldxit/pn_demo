@@ -1,0 +1,10 @@
+/* Tailwind CSS */
+
+.hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+.bgred{
+    background-color: red;
+}
+

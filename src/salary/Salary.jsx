@@ -14,7 +14,7 @@ const TwoTabComponent = () => {
     const fetchDataForTab1 = async () => {
       setLoading(true);
       // Simulate data fetching for Tab 1
-      await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate 2-second delay
+      await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate 2-second delay
       // Example: const data = await apiCallForTab1();
       // setTab1Data(data);
       setLoading(false);
@@ -23,7 +23,7 @@ const TwoTabComponent = () => {
     const fetchDataForTab2 = async () => {
       setLoading(true);
       // Simulate data fetching for Tab 2
-      await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate 2-second delay
+      await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate 2-second delay
       // Example: const data = await apiCallForTab2();
       // setTab2Data(data);
       setLoading(false);
@@ -61,12 +61,12 @@ const TwoTabComponent = () => {
             <CircularProgress />
           </div>
         ) : (
-          <div className='flex w-full'>
+          <div className='flex flex-1 w-full h-fit'>
             {selectedTab === 0 && (
-              <div className='w-full h-screen bg-red-400'>{tab1Data ? tab1Data : <Telecall />}</div>
+              <div className='w-full h-full bg-white'>{tab1Data ? tab1Data : <Telecall />}</div>
             )}
             {selectedTab === 1 && (
-              <div className='w-full h-screen bg-red-400'>{tab2Data ? tab2Data : <Collection />}</div>
+              <div className='w-full h-full bg-white'>{tab2Data ? tab2Data : <Collection />}</div>
             )}
           </div>
         )}
