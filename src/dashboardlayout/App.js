@@ -168,7 +168,7 @@ export default function DashboardLayout({children}) {
           }}
         >
           <Toolbar />
-          <Container maxWidth="xxl" sx={{ mt: 4, mb: 4 }} className='bg-white'>
+          <Container maxWidth="xl"  sx={{ mt: 4, mb: 4 }} className='bg-white'>
           {children}
           </Container>
         </Box>

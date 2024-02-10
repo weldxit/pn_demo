@@ -14,7 +14,7 @@ const TwoTabComponent = () => {
     const fetchDataForTab1 = async () => {
       setLoading(true);
       // Simulate data fetching for Tab 1
-      await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate 2-second delay
+      await new Promise((resolve) => setTimeout(resolve, 0)); // Simulate 2-second delay
       // Example: const data = await apiCallForTab1();
       // setTab1Data(data);
       setLoading(false);
@@ -23,7 +23,7 @@ const TwoTabComponent = () => {
     const fetchDataForTab2 = async () => {
       setLoading(true);
       // Simulate data fetching for Tab 2
-      await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate 2-second delay
+      await new Promise((resolve) => setTimeout(resolve, 0)); // Simulate 2-second delay
       // Example: const data = await apiCallForTab2();
       // setTab2Data(data);
       setLoading(false);

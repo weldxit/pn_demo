@@ -2,8 +2,8 @@ import React from 'react';
 
 const CollectionTable = ({ columns, data }) => {
   return (
-    <div className="flex flex-1 flex-col bg-red-500">
-      <h2 className="text-2xl font-bold">Collection Details</h2>
+    <div className="flex flex-1 flex-col ">
+      <h2 className="text-2xl font-bold bg-blue-500 text-white py-1 px-3">Collection Details</h2>
       <table className="w-full border-collapse">
         <thead>
           <tr className="bg-gray-200">

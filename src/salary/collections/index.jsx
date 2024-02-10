@@ -88,65 +88,30 @@ export default function Collection() {
 
 
   const employees = [
-    { id: 1, name: "John Doe", position: "Software Engineer" },
-    { id: 2, name: "Jane Smith", position: "UX Designer" },
-    { id: 3, name: "Bob Johnson", position: "Product Manager" },
-    { id: 1, name: "John Doe", position: "Software Engineer" },
-    { id: 2, name: "Jane Smith", position: "UX Designer" },
-    { id: 3, name: "Bob Johnson", position: "Product Manager" },
-    { id: 1, name: "John Doe", position: "Software Engineer" },
-    { id: 2, name: "Jane Smith", position: "UX Designer" },
-    { id: 3, name: "Bob Johnson", position: "Product Manager" },
-    { id: 1, name: "John Doe", position: "Software Engineer" },
-    { id: 2, name: "Jane Smith", position: "UX Designer" },
-    { id: 3, name: "Bob Johnson", position: "Product Manager" },
-    { id: 1, name: "John Doe", position: "Software Engineer" },
-    { id: 2, name: "Jane Smith", position: "UX Designer" },
-    { id: 3, name: "Bob Johnson", position: "Product Manager" },
-    { id: 1, name: "John Doe", position: "Software Engineer" },
-    { id: 2, name: "Jane Smith", position: "UX Designer" },
-    { id: 3, name: "Bob Johnson", position: "Product Manager" },
-    { id: 1, name: "John Doe", position: "Software Engineer" },
-    { id: 2, name: "Jane Smith", position: "UX Designer" },
-    { id: 3, name: "Bob Johnson", position: "Product Manager" },
-    { id: 1, name: "John Doe", position: "Software Engineer" },
-    { id: 2, name: "Jane Smith", position: "UX Designer" },
-    { id: 3, name: "Bob Johnson", position: "Product Manager" },
-    { id: 1, name: "John Doe", position: "Software Engineer" },
-    { id: 2, name: "Jane Smith", position: "UX Designer" },
-    { id: 3, name: "Bob Johnson", position: "Product Manager" },
-    { id: 1, name: "John Doe", position: "Software Engineer" },
-    { id: 2, name: "Jane Smith", position: "UX Designer" },
-    { id: 3, name: "Bob Johnson", position: "Product Manager" },
-    { id: 1, name: "John Doe", position: "Software Engineer" },
-    { id: 2, name: "Jane Smith", position: "UX Designer" },
-    { id: 3, name: "Bob Johnson", position: "Product Manager" },
-    { id: 1, name: "John Doe", position: "Software Engineer" },
-    { id: 2, name: "Jane Smith", position: "UX Designer" },
-    { id: 3, name: "Bob Johnson", position: "Product Manager" },
-    { id: 1, name: "John Doe", position: "Software Engineer" },
-    { id: 2, name: "Jane Smith", position: "UX Designer" },
-    { id: 3, name: "Bob Johnson", position: "Product Manager" },
+    { id: 1, name: "Chakradhara Routray Sing", position: "Software Engineer" },
+    { id: 2, name: "Naresh", position: "UX Designer" },
+    { id: 3, name: "Ravi", position: "Product Manager" },
+   
     // Add more employees as needed
   ];
 
   return (
-    <div className="flex flex-1 flex-col h-fit">
+    <div className="flex flex-1 flex-col h-fit sm:bg-green-400 md:bg-red-400 lg:bg-white ">
       <ThreeDropdownComponent
         onTLChange={handleTLChange}
         onProductChange={handleProductChange}
         onExecutiveChange={handleExecutiveChange}
       />
-      <div className="flex flex-1 flex-row h-full w-full p-4 gap-5">
-        <div className="flex  h-[75vh] bg-white-200 overflow-scroll hide border">
+      <div className="flex flex-1 flex-row flex-wrap w-full p-4 gap-5 overflow-hidden md:flex-row">
+        <div className="flex h-full w-full md:w-fit ">
           <EmployeeList employees={employees} onEmployeeClick={handleEmployeeClick} />
         </div>
-        <div className="flex flex-1 h-full ">
-          <div className="flex w-full h-full">
+        <div className="flex flex-1 flex-col md:flex-row gap-5">
+          <div className="flex flex-1">
             <CollectionTable columns={tableColumns} data={tableData} />
           </div>
-          <div className="flex w-[50%] h-full">
-          <CalculatedSalary invoiceData={selectedEmployeeIndex !== null ? sampleInvoiceData[selectedEmployeeIndex] : null} />
+          <div className="flex flex-1">
+            <CalculatedSalary invoiceData={selectedEmployeeIndex !== null ? sampleInvoiceData[selectedEmployeeIndex] : null} />
           </div>
         </div>
       </div>

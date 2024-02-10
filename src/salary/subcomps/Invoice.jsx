@@ -2,17 +2,17 @@ import React from 'react';
 
 const CalculatedSalary = ({ invoiceData }) => {
   return (
-    <div className="flex flex-1 flex-col shadow-lg">
-      <h2 className="text-2xl font-bold mb-4">Invoice</h2>
+    <div className="flex flex-1 flex-col shadow-md">
+      <h2 className="text-2xl font-bold mb-4 bg-blue-500 text-white py-2 px-4">Invoice</h2>
       <div className="bg-white p-4">
         <div className="flex justify-between mb-4">
           <div>
-            <p className="font-bold">Your Company Name</p>
-            <p>Your Address</p>
-            <p>City, Country</p>
+            <p className="font-bold">{invoiceData.customerName}</p>
+            <p>{invoiceData.customerAddress}</p>
+            {/* <p>O</p> */}
           </div>
           <div>
-            <p className="font-bold">Invoice Number: INV-123</p>
+            <p className="font-bold">Employee Id: PN-C-01</p>
             <p>Date: {new Date().toLocaleDateString()}</p>
           </div>
         </div>
